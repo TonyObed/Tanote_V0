@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Check, X, Zap, Crown, Sparkles, Star, Building2, Mail } from "lucide-react"
+import { Check, Zap, Sparkles, Star, Crown, Building2, Mail, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import Link from "next/link"
@@ -12,6 +12,7 @@ const plans = [
     name: "Découverte",
     icon: Zap,
     description: "Accès gratuit",
+    subtitle: "Idéal pour découvrir TaNote sans engagement",
     monthlyPrice: 0,
     yearlyPrice: 0,
     trial: null,
@@ -21,8 +22,9 @@ const plans = [
       "Explications simples et progressives",
       "Accès à plusieurs matières scolaires",
       "Test de niveau de base",
+      "Achat de questions supplémentaires",
     ],
-    notIncluded: ["Achat de questions supplémentaires", "Exercices personnalisés", "Envoi d'exercices en photo"],
+    limitations: ["Exercices personnalisés", "Envoi d'exercices en photo"],
     cta: "Commencer gratuitement",
     popular: false,
   },
@@ -30,6 +32,7 @@ const plans = [
     name: "Essentiel",
     icon: Sparkles,
     description: "Le plus populaire",
+    subtitle: "Le meilleur équilibre entre prix et efficacité",
     monthlyPrice: 4000,
     yearlyPrice: 38400,
     trial: null,
@@ -45,14 +48,15 @@ const plans = [
       "Historique des activités",
       "Toutes les matières scolaires",
     ],
-    notIncluded: ["Envoi de photos (OCR)", "Analyse avancée du mode examen"],
+    limitations: ["Envoi de photos (OCR)", "Analyse avancée du mode examen"],
     cta: "Choisir le plan Essentiel",
     popular: true,
   },
   {
     name: "Avancé",
     icon: Star,
-    description: "Conçu pour les élèves exigeants",
+    description: "Le plus choisi",
+    subtitle: "Conçu pour les élèves exigeants et les objectifs académiques élevés",
     monthlyPrice: 7500,
     yearlyPrice: 72000,
     trial: null,
@@ -69,7 +73,8 @@ const plans = [
       "Traitement prioritaire des demandes",
       "Toutes les matières scolaires",
     ],
-    notIncluded: [],
+    limitations: [],
+    subtitle2: "Une expérience proche d'un accompagnement individuel",
     cta: "Passer au plan Avancé",
     popular: false,
   },
@@ -77,6 +82,7 @@ const plans = [
     name: "Famille",
     icon: Crown,
     description: "Une solution complète",
+    subtitle: "La solution idéale pour une réussite scolaire encadrée à domicile",
     monthlyPrice: 13000,
     yearlyPrice: 124800,
     trial: null,
@@ -94,7 +100,7 @@ const plans = [
       "Envoi d'exercices en photo (OCR)",
       "Support prioritaire parents",
     ],
-    notIncluded: ["Ajout d'enfant supplémentaire (payant)"],
+    limitations: ["Ajout d'enfant supplémentaire (payant)"],
     cta: "Choisir le plan Famille",
     popular: false,
   },
@@ -126,10 +132,7 @@ export function PricingSection() {
   }
 
   return (
-    <section
-      id="pricing"
-      className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#A04BDE]/5 via-[#3B82F6]/5 to-[#00C2FF]/5"
-    >
+    <section id="pricing" className="py-12 px-4 sm:px-6 lg:px-8 bg-muted/30">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-balance">Un plan adapté à chaque besoin</h2>
@@ -154,24 +157,22 @@ export function PricingSection() {
             <div
               key={plan.name}
               className={`relative bg-card rounded-2xl p-5 lg:p-6 border ${
-                plan.popular ? "border-[#3B82F6] shadow-lg shadow-[#3B82F6]/10 ring-2 ring-[#3B82F6]" : "border-border"
+                plan.popular ? "border-primary shadow-lg shadow-primary/10 ring-2 ring-primary" : "border-border"
               }`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-[#A04BDE] to-[#3B82F6] text-white text-xs font-semibold px-3 py-1 rounded-full">
-                    Le plus choisi
+                  <span className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+                    Populaire
                   </span>
                 </div>
               )}
 
               <div className="flex items-center gap-3 mb-4">
                 <div
-                  className={`h-10 w-10 rounded-xl ${
-                    plan.popular ? "bg-gradient-to-br from-[#A04BDE] to-[#3B82F6]" : "bg-[#3B82F6]/10"
-                  } flex items-center justify-center`}
+                  className={`h-10 w-10 rounded-xl ${plan.popular ? "bg-primary" : "bg-primary/10"} flex items-center justify-center`}
                 >
-                  <plan.icon className={`h-5 w-5 ${plan.popular ? "text-white" : "text-[#3B82F6]"}`} />
+                  <plan.icon className={`h-5 w-5 ${plan.popular ? "text-primary-foreground" : "text-primary"}`} />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">{plan.name}</h3>
@@ -197,14 +198,17 @@ export function PricingSection() {
                 <Button
                   className={`w-full mb-4 transition-all duration-300 ${
                     plan.popular
-                      ? "bg-gradient-to-r from-[#A04BDE] to-[#3B82F6] hover:opacity-90"
+                      ? ""
                       : "bg-foreground text-background border-foreground hover:bg-background hover:text-foreground border"
                   }`}
                   size="sm"
+                  variant={plan.popular ? "default" : "outline"}
                 >
                   {plan.cta}
                 </Button>
               </Link>
+
+              {plan.subtitle && <p className="text-xs text-muted-foreground mb-3 italic">{plan.subtitle}</p>}
 
               <ul className="space-y-2">
                 {plan.features.map((feature, i) => (
@@ -213,13 +217,15 @@ export function PricingSection() {
                     <span>{feature}</span>
                   </li>
                 ))}
-                {plan.notIncluded.map((feature, i) => (
+                {plan.limitations.map((limitation, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <X className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                    <span>{feature}</span>
+                    <X className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
+                    <span>{limitation}</span>
                   </li>
                 ))}
               </ul>
+
+              {plan.subtitle2 && <p className="text-xs text-muted-foreground mt-3 italic">{plan.subtitle2}</p>}
             </div>
           ))}
         </div>

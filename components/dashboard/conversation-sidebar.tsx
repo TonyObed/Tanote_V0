@@ -11,7 +11,6 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  LayoutDashboard,
   Brain,
   BookOpen,
   TrendingUp,
@@ -40,10 +39,10 @@ const conversations = [
 ]
 
 const navItems = [
-  { label: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Diagnostic", href: "/dashboard/diagnostic", icon: Brain },
-  { label: "Exercices", href: "/dashboard/exercises", icon: BookOpen },
-  { label: "Progression", href: "/dashboard/progress", icon: TrendingUp },
+  { label: "Discussion", href: "/student", icon: MessageSquare },
+  { label: "Diagnostic", href: "/student/diagnostic", icon: Brain },
+  { label: "Exercices", href: "/student/exercises", icon: BookOpen },
+  { label: "Vue d'ensemble", href: "/student/overview", icon: TrendingUp },
 ]
 
 interface ConversationSidebarProps {
@@ -82,7 +81,7 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen bg-muted/30 border-r border-border flex flex-col transition-all duration-300",
+          "fixed left-0 top-0 z-50 h-screen bg-gradient-to-b from-sidebar to-sidebar/80 backdrop-blur-sm border-r border-border/50 flex flex-col transition-all duration-300 shadow-xl",
           isCollapsed ? "w-16" : "w-64",
           !isOpen && "-translate-x-full lg:translate-x-0",
         )}
@@ -90,16 +89,16 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
         {/* Header */}
         <div
           className={cn(
-            "h-14 flex items-center border-b border-border",
-            isCollapsed ? "justify-center px-2" : "justify-between px-3",
+            "h-16 flex items-center border-b border-border/50",
+            isCollapsed ? "justify-center px-2" : "justify-between px-4",
           )}
         >
           {isCollapsed ? (
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">T</span>
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
+              <span className="text-primary-foreground font-bold text-lg">T</span>
             </div>
           ) : (
-            <TaNoteLogo size="sm" />
+            <TaNoteLogo size="md" />
           )}
           {!isCollapsed && (
             <Button variant="ghost" size="icon" className="h-8 w-8 lg:hidden" onClick={onClose}>
@@ -108,13 +107,13 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
           )}
         </div>
 
-        <div className={cn("p-2 flex", isCollapsed ? "justify-center" : "justify-end")}>
+        <div className={cn("p-3 flex", isCollapsed ? "justify-center" : "justify-end")}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 hidden lg:flex"
+                className="h-8 w-8 hidden lg:flex hover:bg-sidebar-accent rounded-xl"
                 onClick={() => handleCollapse(!isCollapsed)}
               >
                 {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -125,19 +124,26 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
         </div>
 
         {/* New Chat Button */}
-        <div className={cn("px-2", isCollapsed ? "flex justify-center" : "px-3")}>
+        <div className={cn("px-3 mb-3", isCollapsed ? "flex justify-center" : "")}>
           {isCollapsed ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" className="h-9 w-9 bg-background">
-                  <Plus className="h-4 w-4" />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-10 w-10 bg-background shadow-md hover:shadow-lg rounded-xl"
+                >
+                  <Plus className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">Nouvelle conversation</TooltipContent>
             </Tooltip>
           ) : (
-            <Button className="w-full justify-start gap-2 bg-transparent" variant="outline" size="sm">
-              <Plus className="h-4 w-4" />
+            <Button
+              className="w-full justify-start gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg rounded-xl h-10"
+              size="sm"
+            >
+              <Plus className="h-5 w-5" />
               Nouvelle conversation
             </Button>
           )}
@@ -145,23 +151,23 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
 
         {/* Search - Hidden when collapsed */}
         {!isCollapsed && (
-          <div className="px-3 py-2">
+          <div className="px-3 pb-3">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Rechercher..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 h-8 text-sm bg-background"
+                className="pl-9 h-10 text-sm bg-background shadow-sm rounded-xl border-border/50"
               />
             </div>
           </div>
         )}
 
         {/* Navigation */}
-        <div className={cn("py-2", isCollapsed ? "px-2" : "px-3")}>
+        <div className={cn("pb-3", isCollapsed ? "px-2" : "px-3")}>
           {isCollapsed ? (
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center gap-2">
               {navItems.map((item) => {
                 const isActive = pathname === item.href
                 return (
@@ -170,13 +176,13 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
                       <Link
                         href={item.href}
                         className={cn(
-                          "flex items-center justify-center h-9 w-9 rounded-lg transition-colors",
+                          "flex items-center justify-center h-10 w-10 rounded-xl transition-all duration-200",
                           isActive
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                            ? "bg-primary text-primary-foreground shadow-md"
+                            : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
                         )}
                       >
-                        <item.icon className="h-4 w-4" />
+                        <item.icon className="h-5 w-5" />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent side="right">{item.label}</TooltipContent>
@@ -185,7 +191,7 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
               })}
             </div>
           ) : (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-col gap-1.5">
               {navItems.map((item) => {
                 const isActive = pathname === item.href
                 return (
@@ -193,14 +199,14 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-colors",
+                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground",
                     )}
                   >
-                    <item.icon className="h-3 w-3" />
-                    {item.label}
+                    <item.icon className="h-4 w-4 flex-shrink-0" />
+                    <span>{item.label}</span>
                   </Link>
                 )
               })}
@@ -288,24 +294,28 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
         </div>
 
         {/* User Section */}
-        <div className={cn("p-2 border-t border-border", isCollapsed ? "flex justify-center" : "")}>
+        <div className={cn("p-3 border-t border-border/50", isCollapsed ? "flex justify-center" : "")}>
           {isCollapsed ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Avatar className="h-9 w-9 cursor-pointer">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">KY</AvatarFallback>
+                <Avatar className="h-10 w-10 cursor-pointer ring-2 ring-primary/20">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
+                    KY
+                  </AvatarFallback>
                 </Avatar>
               </TooltipTrigger>
               <TooltipContent side="right">Kouamé Yao</TooltipContent>
             </Tooltip>
           ) : (
-            <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-muted cursor-pointer transition-colors">
-              <Avatar className="h-7 w-7">
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs">KY</AvatarFallback>
+            <div className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-sidebar-accent cursor-pointer transition-colors">
+              <Avatar className="h-9 w-9 ring-2 ring-primary/20">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
+                  KY
+                </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium truncate">Kouamé Yao</p>
-                <p className="text-[10px] text-muted-foreground">Terminale D</p>
+                <p className="text-sm font-semibold truncate">Kouamé Yao</p>
+                <p className="text-xs text-muted-foreground">Terminale D</p>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -315,7 +325,7 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/settings">
+                    <Link href="/student/settings">
                       <Settings className="h-3 w-3 mr-2" />
                       Paramètres
                     </Link>

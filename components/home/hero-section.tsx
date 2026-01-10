@@ -8,75 +8,96 @@ import { Play, ChevronLeft, ChevronRight } from "lucide-react"
 
 const slides = [
   {
-    title: "Apprentissage innovant",
-    subtitle: "pour tous",
-    description: "Progresse à ton rythme avec une IA qui s'adapte à ton niveau",
+    title: "Apprentissage innovant pour tous",
+    description: "Les élèves obtiennent des résultats liés à leur niveau d'études ou à leur objectif de carrière",
     image: "/african-student-wearing-vr-headset-and-headphones-.jpg",
-    badge: "Gratuit pour démarrer",
+    gradient: "from-cyan-400 via-blue-500 to-purple-600",
   },
   {
-    title: "Exercices personnalisés",
-    subtitle: "selon tes lacunes",
-    description: "L'IA identifie tes points faibles et crée des exercices sur mesure",
+    title: "Diagnostics IA personnalisés",
+    description: "Une intelligence artificielle qui identifie tes lacunes et crée des exercices adaptés à ton niveau",
     image: "/african-student-studying-with-books-smiling.jpg",
-    badge: "+12 500 élèves actifs",
+    gradient: "from-orange-400 via-red-500 to-pink-600",
   },
   {
-    title: "Réussis tes examens",
-    subtitle: "avec confiance",
-    description: "Prépare-toi efficacement avec des simulations d'examens réalistes",
+    title: "Réussis tes examens avec confiance",
+    description: "Prépare-toi efficacement avec nos exercices et examens chronométrés adaptés au programme ivoirien",
     image: "/african-graduate-student-in-cap-and-gown-celebrati.jpg",
-    badge: "Taux de réussite 92%",
+    gradient: "from-green-400 via-teal-500 to-cyan-600",
   },
 ]
 
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
+
+  const nextSlide = () => {
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
+      setTimeout(() => setIsAnimating(false), 500)
+    }
+  }
+
+  const prevSlide = () => {
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+      setTimeout(() => setIsAnimating(false), 500)
+    }
+  }
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
-    }, 5000)
+    const timer = setInterval(nextSlide, 5000)
     return () => clearInterval(timer)
   }, [])
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length)
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
-
   return (
-    <section className="relative h-[600px] md:h-[700px] overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#A04BDE] via-[#3B82F6] to-[#00C2FF]" />
+    <section className="relative h-[calc(100vh-80px)] min-h-[600px] overflow-hidden">
+      <div className="absolute inset-0">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-all duration-700 ${
+              index === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-105"
+            }`}
+          >
+            <Image
+              src={slide.image || "/placeholder.svg"}
+              alt={slide.title}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+            {/* Gradient overlay pour la lisibilité */}
+            <div className={`absolute inset-0 bg-gradient-to-r ${slide.gradient} opacity-70`} />
+            <div className="absolute inset-0 bg-black/20" />
+          </div>
+        ))}
+      </div>
 
-      {slides.map((slide, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-8 h-full items-center">
-              {/* Left Content */}
-              <div className="space-y-6 text-white z-10 relative pt-20 lg:pt-0">
-                <div className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium border border-white/30">
-                  {slide.badge}
-                </div>
+      {/* Content */}
+      <div className="relative h-full flex items-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="max-w-3xl">
+            <div
+              className={`transition-all duration-700 ${
+                isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+              }`}
+            >
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 text-balance leading-[1.1] drop-shadow-2xl">
+                {slides[currentSlide].title}
+              </h1>
 
-                <div className="space-y-3">
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1]">
-                    {slide.title}
-                    <span className="block mt-2 bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-                      {slide.subtitle}
-                    </span>
-                  </h1>
+              <p className="text-lg sm:text-xl text-white/90 max-w-2xl mb-8 leading-relaxed drop-shadow-lg">
+                {slides[currentSlide].description}
+              </p>
 
-                  <p className="text-lg sm:text-xl text-white/90 max-w-lg leading-relaxed">{slide.description}</p>
-                </div>
-
+              <div className="flex items-center gap-4">
                 <Link href="/auth/register">
                   <Button
                     size="lg"
-                    className="bg-white text-[#3B82F6] hover:bg-white/90 text-base px-8 h-12 gap-2 rounded-full font-semibold shadow-xl"
+                    className="text-base px-8 h-14 gap-2 rounded-full bg-white text-primary hover:bg-white/90 shadow-xl hover:scale-105 transition-transform"
                   >
                     <Play className="h-5 w-5 fill-current" />
                     Commencer maintenant
@@ -84,53 +105,55 @@ export function HeroSection() {
                 </Link>
               </div>
 
-              {/* Right Content - Full Image */}
-              <div className="relative h-full flex items-center justify-end">
-                <div className="relative w-full h-[400px] lg:h-[600px]">
-                  <Image
-                    src={slide.image || "/placeholder.svg"}
-                    alt={slide.title}
-                    fill
-                    className="object-cover object-center rounded-3xl lg:rounded-none"
-                    priority={index === 0}
-                  />
+              <div className="flex items-center gap-3 text-sm text-white/80 pt-6">
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                  <span>Gratuit pour démarrer</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                  <span>+12 500 élèves actifs</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      ))}
+      </div>
 
-      {/* Navigation Controls */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 z-20">
-        <button
-          onClick={prevSlide}
-          className="p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-colors"
-          aria-label="Slide précédent"
-        >
-          <ChevronLeft className="h-5 w-5 text-white" />
-        </button>
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all flex items-center justify-center text-white group"
+        aria-label="Slide précédent"
+      >
+        <ChevronLeft className="h-6 w-6 group-hover:scale-110 transition-transform" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all flex items-center justify-center text-white group"
+        aria-label="Slide suivant"
+      >
+        <ChevronRight className="h-6 w-6 group-hover:scale-110 transition-transform" />
+      </button>
 
-        <div className="flex gap-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`h-2 rounded-full transition-all ${
-                index === currentSlide ? "w-8 bg-white" : "w-2 bg-white/40"
-              }`}
-              aria-label={`Aller au slide ${index + 1}`}
-            />
-          ))}
-        </div>
-
-        <button
-          onClick={nextSlide}
-          className="p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-colors"
-          aria-label="Slide suivant"
-        >
-          <ChevronRight className="h-5 w-5 text-white" />
-        </button>
+      {/* Dots Navigation */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              if (!isAnimating) {
+                setIsAnimating(true)
+                setCurrentSlide(index)
+                setTimeout(() => setIsAnimating(false), 500)
+              }
+            }}
+            className={`h-2 rounded-full transition-all ${
+              index === currentSlide ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/70"
+            }`}
+            aria-label={`Aller au slide ${index + 1}`}
+          />
+        ))}
       </div>
     </section>
   )
