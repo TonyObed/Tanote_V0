@@ -25,7 +25,7 @@ export function DiagnosticCTA({ hasCompletedDiagnostic = false, lastDiagnosticDa
                 Dernier diagnostic effectué le {lastDiagnosticDate}. Refais le diagnostic pour mettre à jour tes
                 recommandations.
               </p>
-              <Link href="/dashboard/diagnostic">
+              <Link href="/student/diagnostic">
                 <Button variant="outline" size="sm">
                   Refaire le diagnostic
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -54,7 +54,7 @@ export function DiagnosticCTA({ hasCompletedDiagnostic = false, lastDiagnosticDa
             <p className="text-sm text-primary-foreground/80 mb-3">
               Notre IA va analyser ton niveau pour te proposer des exercices personnalisés adaptés à tes lacunes.
             </p>
-            <Link href="/dashboard/diagnostic">
+            <Link href="/student/diagnostic">
               <Button variant="secondary" size="sm">
                 Faire le diagnostic
                 <ArrowRight className="ml-2 h-4 w-4" />

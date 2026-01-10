@@ -8,27 +8,27 @@ import { cn } from "@/lib/utils"
 const navItems = [
   {
     label: "Accueil",
-    href: "/dashboard",
+    href: "/student",
     icon: LayoutDashboard,
   },
   {
     label: "Diagnostic",
-    href: "/dashboard/diagnostic",
+    href: "/student/diagnostic",
     icon: Brain,
   },
   {
     label: "Exercices",
-    href: "/dashboard/exercises",
+    href: "/student/exercises",
     icon: BookOpen,
   },
   {
     label: "Progrès",
-    href: "/dashboard/progress",
+    href: "/student/progress",
     icon: TrendingUp,
   },
   {
     label: "Profil",
-    href: "/dashboard/settings",
+    href: "/student/settings",
     icon: User,
   },
 ]

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -199,6 +199,11 @@ export default function OverviewPage() {
   const [selectedDate, setSelectedDate] = useState<number | null>(currentDay)
   const [showAddEventDialog, setShowAddEventDialog] = useState(false)
   const [newEvent, setNewEvent] = useState({ title: "", date: "", time: "", type: "exam" })
+  const [chartAnimationKey, setChartAnimationKey] = useState(0)
+
+  useEffect(() => {
+    setChartAnimationKey((prev) => prev + 1)
+  }, [])
 
   return (
     <div className="min-h-screen bg-[#1a1625] p-6">
@@ -349,7 +354,7 @@ export default function OverviewPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
+                <ResponsiveContainer width="100%" height={280} key={chartAnimationKey}>
                   <LineChart data={progressData}>
                     <defs>
                       <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
@@ -379,8 +384,10 @@ export default function OverviewPage() {
                       stroke="#3b82f6"
                       strokeWidth={3}
                       dot={{ fill: "#ec4899", r: 6 }}
-                      activeDot={{ r: 8, fill: "#ec4899" }}
+                      activeDot={{ r: 10, fill: "#ec4899", stroke: "#fff", strokeWidth: 2 }}
                       fill="url(#colorScore)"
+                      animationDuration={2000}
+                      animationEasing="ease-in-out"
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -399,7 +406,7 @@ export default function OverviewPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
+                <ResponsiveContainer width="100%" height={280} key={chartAnimationKey}>
                   <BarChart data={weeklyActivity}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#2d2640" vertical={false} />
                     <XAxis dataKey="day" stroke="#64748b" tick={{ fill: "#64748b", fontSize: 12 }} />
@@ -418,7 +425,20 @@ export default function OverviewPage() {
                         color: "#fff",
                       }}
                     />
-                    <Bar dataKey="rate" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                    <Bar
+                      dataKey="rate"
+                      fill="url(#blueGradient)"
+                      radius={[12, 12, 0, 0]}
+                      animationDuration={1500}
+                      animationEasing="ease-out"
+                    >
+                      <defs>
+                        <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#3b82f6" />
+                          <stop offset="100%" stopColor="#1e40af" />
+                        </linearGradient>
+                      </defs>
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

@@ -1,63 +1,119 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, CheckCircle2, Sparkles, Zap, Users } from "lucide-react"
+"use client"
 
-const benefits = [
-  { icon: Zap, text: "Inscription en 30 secondes" },
-  { icon: CheckCircle2, text: "Sans carte bancaire" },
-  { icon: Users, text: "+12 500 élèves nous font confiance" },
+import { ButtonWithPixel } from "@/components/ui/button-with-pixel"
+import Link from "next/link"
+import { FaReact, FaGithub, FaTwitter, FaLinkedin, FaGoogle } from "react-icons/fa"
+import { SiNextdotjs, SiTypescript, SiFacebook } from "react-icons/si"
+import { BookOpen, Brain, Target, TrendingUp } from "lucide-react"
+
+const iconConfigs = [
+  { Icon: BookOpen, color: "#0ea5e9" },
+  { Icon: Brain, color: "#8b5cf6" },
+  { Icon: Target, color: "#f59e0b" },
+  { Icon: TrendingUp, color: "#10b981" },
+  { Icon: FaReact, color: "#61DAFB" },
+  { Icon: SiNextdotjs, color: "#000000" },
+  { Icon: SiTypescript, color: "#3178C6" },
+  { Icon: FaGithub, color: "#181717" },
+  { Icon: FaGoogle, color: "#DB4437" },
+  { Icon: SiFacebook, color: "#1877F2" },
+  { Icon: FaTwitter, color: "#1DA1F2" },
+  { Icon: FaLinkedin, color: "#0077B5" },
 ]
 
 export function CTASection() {
+  const orbitCount = 3
+  const orbitGap = 8
+  const iconsPerOrbit = Math.ceil(iconConfigs.length / orbitCount)
+
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
-        <div className="relative bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-3xl p-8 sm:p-10 lg:p-14 overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-2xl" />
-
-          <div className="relative z-10">
-            <div className="flex items-center justify-center mb-5">
-              <div className="inline-flex items-center gap-2 bg-white text-primary rounded-full px-5 py-2 text-sm font-bold shadow-lg">
-                <Sparkles className="h-4 w-4" />
-                <span>Rejoins la communauté TaNote</span>
-              </div>
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 text-center text-balance drop-shadow-md">
-              Prêt à transformer tes résultats scolaires ?
-            </h2>
-            <p className="text-white/95 max-w-2xl mx-auto mb-6 text-base sm:text-lg text-center leading-relaxed drop-shadow-sm">
-              Ne laisse plus les exercices difficiles te bloquer. Avec TaNote, chaque problème devient une opportunité
-              d'apprendre.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-              <Link href="/auth/register">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-base px-8 h-12 gap-2 group font-semibold shadow-lg bg-white text-primary border-white hover:bg-primary hover:text-white hover:border-white transition-all duration-300"
-                >
-                  Commencer gratuitement maintenant
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8">
-              {benefits.map((benefit, i) => (
-                <div key={i} className="flex items-center gap-2 text-white">
-                  <benefit.icon className="h-4 w-4" />
-                  <span className="text-sm font-medium">{benefit.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+    <section className="relative max-w-6xl mx-auto my-32 pl-4 sm:pl-10 flex flex-col lg:flex-row items-center justify-between min-h-[30rem] border border-gray-200 dark:border-gray-700 bg-white dark:bg-black overflow-hidden rounded-3xl">
+      <div className="w-full lg:w-1/2 z-10 p-8 lg:p-0">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-gray-900 dark:text-white text-balance">
+          Prêt à transformer tes résultats scolaires ?
+        </h1>
+        <p className="text-gray-500 dark:text-gray-300 mb-6 max-w-lg">
+          Ne laisse plus les exercices difficiles te bloquer. Avec TaNote, chaque problème devient une opportunité
+          d'apprendre.
+        </p>
+        <div className="flex items-center gap-3">
+          <Link href="/auth/register">
+            <ButtonWithPixel size="lg" pixelColors={["#0ea5e9", "#7dd3fc", "#e0f2fe"]} pixelGap={8} pixelSpeed={30}>
+              Commencer gratuitement
+            </ButtonWithPixel>
+          </Link>
+          <ButtonWithPixel
+            variant="outline"
+            size="lg"
+            pixelColors={["#94a3b8", "#cbd5e1", "#e2e8f0"]}
+            pixelGap={8}
+            pixelSpeed={25}
+          >
+            En savoir plus
+          </ButtonWithPixel>
         </div>
       </div>
+
+      <div className="relative w-full lg:w-1/2 h-full flex items-center justify-start overflow-hidden">
+        <div className="relative w-[50rem] h-[50rem] translate-x-[50%] flex items-center justify-center">
+          {/* Center Circle with TaNote logo */}
+          <div className="w-24 h-24 rounded-full bg-primary shadow-lg flex items-center justify-center">
+            <Brain className="w-12 h-12 text-primary-foreground" />
+          </div>
+
+          {/* Generate Orbits */}
+          {[...Array(orbitCount)].map((_, orbitIdx) => {
+            const size = `${12 + orbitGap * (orbitIdx + 1)}rem`
+            const angleStep = (2 * Math.PI) / iconsPerOrbit
+
+            return (
+              <div
+                key={orbitIdx}
+                className="absolute rounded-full border-2 border-dotted border-gray-300 dark:border-gray-600"
+                style={{
+                  width: size,
+                  height: size,
+                  animation: `spin ${12 + orbitIdx * 6}s linear infinite`,
+                }}
+              >
+                {iconConfigs
+                  .slice(orbitIdx * iconsPerOrbit, orbitIdx * iconsPerOrbit + iconsPerOrbit)
+                  .map((cfg, iconIdx) => {
+                    const angle = iconIdx * angleStep
+                    const x = 50 + 50 * Math.cos(angle)
+                    const y = 50 + 50 * Math.sin(angle)
+
+                    return (
+                      <div
+                        key={iconIdx}
+                        className="absolute bg-white dark:bg-gray-800 rounded-full p-1 shadow-md"
+                        style={{
+                          left: `${x}%`,
+                          top: `${y}%`,
+                          transform: "translate(-50%, -50%)",
+                        }}
+                      >
+                        <cfg.Icon className="w-8 h-8" style={{ color: cfg.color }} />
+                      </div>
+                    )
+                  })}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Animation keyframes */}
+      <style jsx>{`
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </section>
   )
 }

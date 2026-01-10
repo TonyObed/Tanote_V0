@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Users, BookOpen, Trophy, TrendingUp } from "lucide-react"
 
 const stats = [
@@ -73,8 +73,28 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export function StatsSection() {
+  const [isVisible, setIsVisible] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.2 },
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-primary/5 to-transparent">
+    <section ref={sectionRef} className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-primary/5 to-transparent">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-balance">Des résultats qui parlent d'eux-mêmes</h2>
@@ -87,17 +107,28 @@ export function StatsSection() {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="relative bg-card rounded-2xl p-5 border border-border text-center group hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className={`relative bg-card rounded-2xl p-5 border border-border text-center group hover:shadow-2xl hover:border-primary/30 transition-all duration-500 hover:-translate-y-2 hover:scale-105 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+              style={{
+                transitionDelay: isVisible ? `${index * 100}ms` : "0ms",
+              }}
             >
-              <div
-                className={`mx-auto h-12 w-12 rounded-xl ${stat.bgColor} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}
-              >
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-accent/5 rounded-2xl transition-all duration-500" />
+
+              <div className="relative z-10">
+                <div
+                  className={`mx-auto h-12 w-12 rounded-xl ${stat.bgColor} flex items-center justify-center mb-3 group-hover:scale-125 group-hover:rotate-6 transition-all duration-500`}
+                >
+                  <stat.icon
+                    className={`h-6 w-6 ${stat.color} group-hover:scale-110 transition-transform duration-300`}
+                  />
+                </div>
+                <p className="text-2xl sm:text-3xl font-bold mb-1 group-hover:scale-110 transition-transform duration-300">
+                  <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                </p>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
               </div>
-              <p className="text-2xl sm:text-3xl font-bold mb-1">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              </p>
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
             </div>
           ))}
         </div>

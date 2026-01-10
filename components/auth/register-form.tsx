@@ -6,6 +6,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, GraduationCap, Users } from "lucide-react"
+import { ButtonWithPixel } from "@/components/ui/button-with-pixel"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -34,7 +35,7 @@ export function RegisterForm() {
     // Simulation - sera remplacé par le backend
     setTimeout(() => {
       setIsLoading(false)
-      router.push("/dashboard")
+      router.push("/student")
     }, 1500)
   }
 
@@ -227,7 +228,14 @@ export function RegisterForm() {
             </div>
           </div>
 
-          <Button type="submit" className="w-full h-11 font-semibold" disabled={isLoading}>
+          <ButtonWithPixel
+            type="submit"
+            className="w-full h-11 font-semibold"
+            disabled={isLoading}
+            pixelColors={["#0ea5e9", "#7dd3fc", "#e0f2fe"]}
+            pixelGap={8}
+            pixelSpeed={30}
+          >
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
@@ -239,7 +247,7 @@ export function RegisterForm() {
                 <ArrowRight className="h-4 w-4" />
               </div>
             )}
-          </Button>
+          </ButtonWithPixel>
         </form>
 
         <p className="mt-4 text-xs text-center text-muted-foreground">

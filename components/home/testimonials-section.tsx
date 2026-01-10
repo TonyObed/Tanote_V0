@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 const testimonials = [
   {
@@ -72,11 +73,10 @@ export function TestimonialsSection() {
             >
               <Quote className="absolute top-5 right-5 h-8 w-8 text-primary/10" />
               <div className="flex items-center gap-3 mb-4">
-                <img
-                  src={testimonial.avatar || "/placeholder.svg"}
-                  alt={testimonial.name}
-                  className="h-12 w-12 rounded-full object-cover border-2 border-primary/20"
-                />
+                <Avatar className="h-12 w-12 border-2 border-primary/20">
+                  <AvatarImage src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} />
+                  <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                </Avatar>
                 <div>
                   <h4 className="font-semibold text-sm">{testimonial.name}</h4>
                   <p className="text-xs text-muted-foreground">{testimonial.role}</p>
@@ -98,11 +98,13 @@ export function TestimonialsSection() {
           <div className="bg-card rounded-xl p-5 border border-border relative">
             <Quote className="absolute top-4 right-4 h-6 w-6 text-primary/10" />
             <div className="flex items-center gap-3 mb-3">
-              <img
-                src={testimonials[currentIndex].avatar || "/placeholder.svg"}
-                alt={testimonials[currentIndex].name}
-                className="h-12 w-12 rounded-full object-cover border-2 border-primary/20"
-              />
+              <Avatar className="h-12 w-12 border-2 border-primary/20">
+                <AvatarImage
+                  src={testimonials[currentIndex].avatar || "/placeholder.svg"}
+                  alt={testimonials[currentIndex].name}
+                />
+                <AvatarFallback>{testimonials[currentIndex].name.charAt(0)}</AvatarFallback>
+              </Avatar>
               <div>
                 <h4 className="font-semibold text-sm">{testimonials[currentIndex].name}</h4>
                 <p className="text-xs text-muted-foreground">{testimonials[currentIndex].role}</p>

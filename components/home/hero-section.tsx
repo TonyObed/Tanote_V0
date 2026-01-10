@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import { ButtonWithPixel } from "@/components/ui/button-with-pixel"
 import { Play, ChevronLeft, ChevronRight } from "lucide-react"
 
 const slides = [
@@ -30,6 +30,13 @@ const slides = [
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const nextSlide = () => {
     if (!isAnimating) {
@@ -54,12 +61,12 @@ export function HeroSection() {
 
   return (
     <section className="relative h-[calc(100vh-80px)] min-h-[600px] overflow-hidden">
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-all duration-700 ${
-              index === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-105"
+            className={`absolute inset-0 transition-all duration-1000 ease-out ${
+              index === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-110"
             }`}
           >
             <Image
@@ -81,8 +88,8 @@ export function HeroSection() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="max-w-3xl">
             <div
-              className={`transition-all duration-700 ${
-                isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+              className={`transition-all duration-700 ease-out ${
+                isAnimating ? "opacity-0 translate-y-8 scale-95" : "opacity-100 translate-y-0 scale-100"
               }`}
             >
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 text-balance leading-[1.1] drop-shadow-2xl">
@@ -95,24 +102,27 @@ export function HeroSection() {
 
               <div className="flex items-center gap-4">
                 <Link href="/auth/register">
-                  <Button
+                  <ButtonWithPixel
                     size="lg"
                     className="text-base px-8 h-14 gap-2 rounded-full bg-white text-primary hover:bg-white/90 shadow-xl hover:scale-105 transition-transform"
+                    pixelColors={["#e0f2fe", "#7dd3fc", "#0ea5e9"]}
+                    pixelGap={8}
+                    pixelSpeed={30}
                   >
                     <Play className="h-5 w-5 fill-current" />
                     Commencer maintenant
-                  </Button>
+                  </ButtonWithPixel>
                 </Link>
               </div>
 
               <div className="flex items-center gap-3 text-sm text-white/80 pt-6">
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                  <span>Gratuit pour démarrer</span>
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 shadow-xl hover:scale-105 transition-transform">
+                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse shadow-lg shadow-green-400/50" />
+                  <span className="font-medium">Gratuit pour démarrer</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                  <span>+12 500 élèves actifs</span>
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 shadow-xl hover:scale-105 transition-transform">
+                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse shadow-lg shadow-green-400/50" />
+                  <span className="font-medium">+12 500 élèves actifs</span>
                 </div>
               </div>
             </div>
@@ -120,23 +130,21 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all flex items-center justify-center text-white group"
+        className="absolute left-4 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 hover:scale-110 transition-all duration-300 flex items-center justify-center text-white group shadow-2xl"
         aria-label="Slide précédent"
       >
-        <ChevronLeft className="h-6 w-6 group-hover:scale-110 transition-transform" />
+        <ChevronLeft className="h-7 w-7 group-hover:scale-125 transition-transform duration-300" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 transition-all flex items-center justify-center text-white group"
+        className="absolute right-4 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 hover:scale-110 transition-all duration-300 flex items-center justify-center text-white group shadow-2xl"
         aria-label="Slide suivant"
       >
-        <ChevronRight className="h-6 w-6 group-hover:scale-110 transition-transform" />
+        <ChevronRight className="h-7 w-7 group-hover:scale-125 transition-transform duration-300" />
       </button>
 
-      {/* Dots Navigation */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
         {slides.map((_, index) => (
           <button
@@ -145,11 +153,13 @@ export function HeroSection() {
               if (!isAnimating) {
                 setIsAnimating(true)
                 setCurrentSlide(index)
-                setTimeout(() => setIsAnimating(false), 500)
+                setTimeout(() => setIsAnimating(false), 700)
               }
             }}
-            className={`h-2 rounded-full transition-all ${
-              index === currentSlide ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/70"
+            className={`h-2.5 rounded-full transition-all duration-500 ${
+              index === currentSlide
+                ? "w-10 bg-white shadow-lg shadow-white/50 scale-110"
+                : "w-2.5 bg-white/50 hover:bg-white/70 hover:scale-125"
             }`}
             aria-label={`Aller au slide ${index + 1}`}
           />

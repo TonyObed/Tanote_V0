@@ -6,8 +6,7 @@ import { ProfileForm } from "@/components/settings/profile-form"
 import { PasswordForm } from "@/components/settings/password-form"
 import { NotificationSettings } from "@/components/settings/notification-settings"
 import { PreferencesSettings } from "@/components/settings/preferences-settings"
-import { DangerZone } from "@/components/settings/danger-zone"
-import { User, Lock, Bell, Settings, AlertTriangle } from "lucide-react"
+import { User, Lock, Bell, Settings } from "lucide-react"
 
 // Mock user data
 const mockUser = {
@@ -25,7 +24,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile")
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 lg:p-8 space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Paramètres</h1>
@@ -34,7 +33,7 @@ export default function SettingsPage() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 h-auto p-1">
           <TabsTrigger value="profile" className="flex items-center gap-2 py-2.5">
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Profil</span>
@@ -50,13 +49,6 @@ export default function SettingsPage() {
           <TabsTrigger value="preferences" className="flex items-center gap-2 py-2.5">
             <Settings className="h-4 w-4" />
             <span className="hidden sm:inline">Préférences</span>
-          </TabsTrigger>
-          <TabsTrigger
-            value="danger"
-            className="flex items-center gap-2 py-2.5 text-destructive data-[state=active]:text-destructive"
-          >
-            <AlertTriangle className="h-4 w-4" />
-            <span className="hidden sm:inline">Danger</span>
           </TabsTrigger>
         </TabsList>
 
@@ -74,10 +66,6 @@ export default function SettingsPage() {
 
         <TabsContent value="preferences">
           <PreferencesSettings />
-        </TabsContent>
-
-        <TabsContent value="danger">
-          <DangerZone />
         </TabsContent>
       </Tabs>
     </div>

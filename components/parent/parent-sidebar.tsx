@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { LayoutDashboard, MessageSquare, Calendar, Wallet, Bell, GraduationCap, MoreHorizontal } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { LayoutDashboard, MessageSquare, Calendar, Wallet, Bell, Settings, LogOut } from "lucide-react"
 import { TaNoteLogo } from "@/components/tanote-logo"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -14,11 +14,15 @@ const navItems = [
   { label: "Calendrier", href: "/parent/calendar", icon: Calendar },
   { label: "Finances", href: "/parent/finances", icon: Wallet },
   { label: "Notifications", href: "/parent/notifications", icon: Bell },
-  { label: "Cours", href: "/parent/courses", icon: GraduationCap },
 ]
 
 export function ParentSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    router.push("/auth/login")
+  }
 
   return (
     <aside className="fixed left-0 top-0 z-50 h-screen w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm">
@@ -45,21 +49,7 @@ export function ParentSidebar() {
             </Link>
           )
         })}
-        <Button
-          variant="ghost"
-          className="w-full justify-start px-4 text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-        >
-          <MoreHorizontal className="h-5 w-5 mr-3" />
-          Plus
-        </Button>
       </nav>
-
-      {/* Request Session Button */}
-      <div className="px-4 pb-4">
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-6 text-base font-semibold shadow-lg">
-          Demander une session
-        </Button>
-      </div>
 
       {/* Balance */}
       <div className="px-4 pb-4">
@@ -74,9 +64,8 @@ export function ParentSidebar() {
         </div>
       </div>
 
-      {/* User Profile */}
-      <div className="border-t border-gray-100 p-4">
-        <div className="flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+      <div className="border-t border-gray-100 p-4 space-y-3">
+        <div className="flex items-center gap-3 px-2">
           <Avatar className="h-10 w-10">
             <AvatarFallback className="bg-gradient-to-br from-blue-600 to-cyan-600 text-white font-semibold">
               MK
@@ -86,20 +75,27 @@ export function ParentSidebar() {
             <p className="text-sm font-semibold text-gray-900 truncate">M. Koné</p>
             <p className="text-xs text-gray-500">Parent</p>
           </div>
-          <MoreHorizontal className="h-4 w-4 text-gray-400" />
         </div>
-      </div>
 
-      {/* Footer Branding */}
-      <div className="border-t border-gray-100 p-4">
-        <div className="flex items-center gap-2 px-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">T</span>
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-gray-900">TaNote</p>
-            <p className="text-[10px] text-gray-500">Dashboard pour Parent</p>
-          </div>
+        {/* Settings and Logout buttons */}
+        <div className="space-y-2">
+          <Link href="/parent/settings" className="block">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Paramètres
+            </Button>
+          </Link>
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Se déconnecter
+          </Button>
         </div>
       </div>
     </aside>

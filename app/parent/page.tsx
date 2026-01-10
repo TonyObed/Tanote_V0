@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Plus, BookOpen, Clock, ChevronLeft, ChevronRight, FileText, Users, Check, Heart } from "lucide-react"
+import { Plus, BookOpen, Clock, ChevronLeft, ChevronRight, FileText, Star, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts"
 
@@ -76,22 +76,26 @@ const goalsData = [
   },
 ]
 
-const tutorsData = [
+const exercisesData = [
   {
     id: "1",
-    name: "Jonathan",
-    subject: "Algèbre Linéaire II",
-    description: "Cherche tuteur pour développement personnel",
-    avatar: "J",
-    color: "from-orange-500 to-amber-500",
+    title: "Équations du second degré",
+    subject: "Mathématiques",
+    difficulty: "Moyen",
+    description: "Résolution complète avec delta",
+    duration: "15 min",
+    stars: 4,
+    color: "from-blue-500 to-cyan-500",
   },
   {
     id: "2",
-    name: "Kate",
-    subject: "Calculus",
-    description: "Cherche tuteur pour préparation test",
-    avatar: "K",
-    color: "from-pink-500 to-rose-500",
+    title: "Les réactions chimiques",
+    subject: "Chimie",
+    difficulty: "Facile",
+    description: "Équilibrer les équations",
+    duration: "10 min",
+    stars: 3,
+    color: "from-purple-500 to-pink-500",
   },
 ]
 
@@ -159,7 +163,7 @@ const alerts = [
     type: "warning",
     childName: "Kouamé",
     message: "Score en baisse en Physique-Chimie (-12% ce mois)",
-    icon: Heart,
+    icon: Star,
   },
   {
     id: "2",
@@ -217,7 +221,7 @@ const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1)
 export default function ParentDashboard() {
   const [selectedChild, setSelectedChild] = useState(childrenData[0])
   const [selectedDate, setSelectedDate] = useState<number | null>(currentDay)
-  const [tutorIndex, setTutorIndex] = useState(0)
+  const [exerciseIndex, setExerciseIndex] = useState(0)
 
   const globalStats = {
     totalChildren: childrenData.length,
@@ -311,17 +315,17 @@ export default function ParentDashboard() {
             </div>
           </div>
 
-          {/* Recommended Tutors */}
+          {/* Recommended Exercises */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Tuteurs recommandés</h2>
+              <h2 className="text-xl font-bold text-gray-900">Exercices recommandés pour {selectedChild.name}</h2>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="icon"
                   className="h-8 w-8 rounded-full bg-transparent"
-                  onClick={() => setTutorIndex(Math.max(0, tutorIndex - 1))}
-                  disabled={tutorIndex === 0}
+                  onClick={() => setExerciseIndex(Math.max(0, exerciseIndex - 1))}
+                  disabled={exerciseIndex === 0}
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -329,48 +333,45 @@ export default function ParentDashboard() {
                   variant="outline"
                   size="icon"
                   className="h-8 w-8 rounded-full bg-transparent"
-                  onClick={() => setTutorIndex(Math.min(tutorsData.length - 1, tutorIndex + 1))}
-                  disabled={tutorIndex === tutorsData.length - 1}
+                  onClick={() => setExerciseIndex(Math.min(exercisesData.length - 1, exerciseIndex + 1))}
+                  disabled={exerciseIndex === exercisesData.length - 1}
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {tutorsData.map((tutor) => (
-                <Card key={tutor.id} className="border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+              {exercisesData.map((exercise) => (
+                <Card key={exercise.id} className="border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-semibold text-gray-900">{tutor.subject}</CardTitle>
-                    <p className="text-sm text-gray-500">{tutor.description}</p>
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center">
+                        <BookOpen className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700 font-medium">
+                        {exercise.difficulty}
+                      </span>
+                    </div>
+                    <CardTitle className="text-base font-semibold text-gray-900">{exercise.title}</CardTitle>
+                    <p className="text-sm text-gray-500">{exercise.subject}</p>
                   </CardHeader>
                   <CardContent>
+                    <p className="text-sm text-gray-600 mb-3">{exercise.description}</p>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                          <AvatarFallback className={cn("bg-gradient-to-br text-white font-semibold", tutor.color)}>
-                            {tutor.avatar}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">{tutor.name}</p>
-                          <Button variant="link" className="text-xs p-0 h-auto text-blue-600 hover:text-blue-700">
-                            voir profil
-                          </Button>
-                        </div>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: exercise.stars }).map((_, i) => (
+                          <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                        ))}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-10 w-10 rounded-full border-gray-200 bg-transparent"
-                        >
-                          <Heart className="h-4 w-4 text-gray-400" />
-                        </Button>
-                        <Button size="icon" className="h-10 w-10 rounded-full bg-blue-600 hover:bg-blue-700">
-                          <Check className="h-5 w-5 text-white" />
-                        </Button>
-                      </div>
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {exercise.duration}
+                      </span>
                     </div>
+                    <Button className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white">
+                      <TrendingUp className="h-4 w-4 mr-2" />
+                      Commencer
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -433,7 +434,7 @@ export default function ParentDashboard() {
                         <p className="font-semibold text-gray-900 text-sm mb-1">{lesson.subject}</p>
                         <p className="text-xs text-gray-500 mb-2">{lesson.date}</p>
                         <div className="flex items-center gap-1">
-                          <Users className="h-3 w-3 text-gray-400" />
+                          <FileText className="h-3 w-3 text-gray-400" />
                           <p className="text-xs text-gray-500">{lesson.attendees.join(" et ")}</p>
                         </div>
                       </div>

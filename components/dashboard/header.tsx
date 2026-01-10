@@ -65,10 +65,10 @@ export function Header({ userName = "Kouamé", userClass = "Terminale D" }: Head
               <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings">Profil</Link>
+                <Link href="/student/settings">Profil</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings">Paramètres</Link>
+                <Link href="/student/settings">Paramètres</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>

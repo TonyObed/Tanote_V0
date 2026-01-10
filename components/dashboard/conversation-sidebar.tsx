@@ -81,7 +81,7 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen bg-gradient-to-b from-sidebar to-sidebar/80 backdrop-blur-sm border-r border-border/50 flex flex-col transition-all duration-300 shadow-xl",
+          "fixed left-0 top-0 z-50 h-screen bg-gradient-to-b from-sidebar via-sidebar/95 to-sidebar/90 backdrop-blur-xl border-r border-border/50 flex flex-col transition-all duration-500 ease-out shadow-2xl",
           isCollapsed ? "w-16" : "w-64",
           !isOpen && "-translate-x-full lg:translate-x-0",
         )}
@@ -199,14 +199,21 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                      "relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 overflow-hidden group",
                       isActive
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground",
+                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:scale-105",
                     )}
                   >
-                    <item.icon className="h-4 w-4 flex-shrink-0" />
-                    <span>{item.label}</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+
+                    <item.icon
+                      className={cn(
+                        "h-4 w-4 flex-shrink-0 transition-all duration-300",
+                        isActive ? "scale-110 rotate-12" : "group-hover:scale-125 group-hover:rotate-6",
+                      )}
+                    />
+                    <span className="relative z-10">{item.label}</span>
                   </Link>
                 )
               })}
@@ -294,51 +301,81 @@ export function ConversationSidebar({ isOpen = true, onClose, onCollapseChange }
         </div>
 
         {/* User Section */}
-        <div className={cn("p-3 border-t border-border/50", isCollapsed ? "flex justify-center" : "")}>
+        <div className={cn("p-3 border-t border-border/50 space-y-2", isCollapsed ? "flex flex-col items-center" : "")}>
           {isCollapsed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Avatar className="h-10 w-10 cursor-pointer ring-2 ring-primary/20">
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Avatar className="h-10 w-10 cursor-pointer ring-2 ring-primary/20">
+                    <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
+                      KY
+                    </AvatarFallback>
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent side="right">Kouamé Yao</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                    <Link href="/student/settings">
+                      <Settings className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">Paramètres</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-destructive hover:text-destructive"
+                    asChild
+                  >
+                    <Link href="/auth/login">
+                      <LogOut className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">Déconnexion</TooltipContent>
+              </Tooltip>
+            </>
+          ) : (
+            <>
+              {/* Profile Info */}
+              <div className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-sidebar-accent cursor-pointer transition-colors">
+                <Avatar className="h-9 w-9 ring-2 ring-primary/20">
                   <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
                     KY
                   </AvatarFallback>
                 </Avatar>
-              </TooltipTrigger>
-              <TooltipContent side="right">Kouamé Yao</TooltipContent>
-            </Tooltip>
-          ) : (
-            <div className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-sidebar-accent cursor-pointer transition-colors">
-              <Avatar className="h-9 w-9 ring-2 ring-primary/20">
-                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
-                  KY
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate">Kouamé Yao</p>
-                <p className="text-xs text-muted-foreground">Terminale D</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold truncate">Kouamé Yao</p>
+                  <p className="text-xs text-muted-foreground">Terminale D</p>
+                </div>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-6 w-6">
-                    <MoreHorizontal className="h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href="/student/settings">
-                      <Settings className="h-3 w-3 mr-2" />
-                      Paramètres
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="text-destructive">
-                    <Link href="/auth/login">
-                      <LogOut className="h-3 w-3 mr-2" />
-                      Déconnexion
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" className="flex-1 h-9 text-xs bg-transparent" asChild>
+                  <Link href="/student/settings">
+                    <Settings className="h-3.5 w-3.5 mr-1.5" />
+                    Paramètres
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 h-9 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 bg-transparent"
+                  asChild
+                >
+                  <Link href="/auth/login">
+                    <LogOut className="h-3.5 w-3.5 mr-1.5" />
+                    Déconnexion
+                  </Link>
+                </Button>
+              </div>
+            </>
           )}
         </div>
       </aside>

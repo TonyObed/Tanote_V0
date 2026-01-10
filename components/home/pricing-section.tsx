@@ -2,10 +2,11 @@
 
 import { useState } from "react"
 import { Check, Zap, Sparkles, Star, Crown, Building2, Mail, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ButtonWithPixel } from "@/components/ui/button-with-pixel"
 import { Switch } from "@/components/ui/switch"
 import Link from "next/link"
-import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { LogoCloud } from "@/components/ui/logo-cloud"
 
 const plans = [
   {
@@ -106,18 +107,26 @@ const plans = [
   },
 ]
 
-const paymentMethods = [
+const logos = [
   {
-    name: "Wave",
-    logo: "/wave-mobile-money-logo-blue.jpg",
+    src: "https://svgl.app/library/nvidia-wordmark-light.svg",
+    alt: "Nvidia",
   },
   {
-    name: "Orange Money",
-    logo: "/orange-money-logo.jpg",
+    src: "https://svgl.app/library/openai_wordmark_light.svg",
+    alt: "OpenAI",
   },
   {
-    name: "Visa",
-    logo: "/visa-card-logo-blue-gold.jpg",
+    src: "https://svgl.app/library/vercel_wordmark.svg",
+    alt: "Vercel",
+  },
+  {
+    src: "https://svgl.app/library/github_wordmark_light.svg",
+    alt: "GitHub",
+  },
+  {
+    src: "https://svgl.app/library/claude-ai-wordmark-icon_light.svg",
+    alt: "Claude AI",
   },
 ]
 
@@ -195,7 +204,7 @@ export function PricingSection() {
               </div>
 
               <Link href="/auth/register">
-                <Button
+                <ButtonWithPixel
                   className={`w-full mb-4 transition-all duration-300 ${
                     plan.popular
                       ? ""
@@ -203,9 +212,12 @@ export function PricingSection() {
                   }`}
                   size="sm"
                   variant={plan.popular ? "default" : "outline"}
+                  pixelColors={plan.popular ? ["#0ea5e9", "#7dd3fc", "#e0f2fe"] : ["#94a3b8", "#cbd5e1", "#e2e8f0"]}
+                  pixelGap={8}
+                  pixelSpeed={30}
                 >
                   {plan.cta}
-                </Button>
+                </ButtonWithPixel>
               </Link>
 
               {plan.subtitle && <p className="text-xs text-muted-foreground mb-3 italic">{plan.subtitle}</p>}
@@ -241,34 +253,37 @@ export function PricingSection() {
             Nous proposons des tarifs spéciaux pour les écoles, collèges, lycées et universités.
           </p>
           <Link href="#contact">
-            <Button
+            <ButtonWithPixel
               variant="outline"
               className="gap-2 bg-foreground text-background border-foreground hover:bg-background hover:text-foreground transition-all duration-300"
+              pixelColors={["#94a3b8", "#cbd5e1", "#e2e8f0"]}
+              pixelGap={8}
+              pixelSpeed={25}
             >
               <Mail className="h-4 w-4" />
               Contactez-nous pour un devis
-            </Button>
+            </ButtonWithPixel>
           </Link>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground mb-4">Paiement sécurisé par :</p>
-          <div className="flex items-center justify-center gap-6 flex-wrap">
-            {paymentMethods.map((method) => (
-              <div
-                key={method.name}
-                className="h-12 w-28 relative bg-white rounded-lg border border-border overflow-hidden flex items-center justify-center p-2 shadow-sm"
-              >
-                <Image
-                  src={method.logo || "/placeholder.svg"}
-                  alt={method.name}
-                  width={100}
-                  height={50}
-                  className="object-contain max-h-8"
-                  unoptimized
-                />
-              </div>
-            ))}
+        <div className="mt-8">
+          <div
+            aria-hidden="true"
+            className={cn(
+              "-top-1/2 -translate-x-1/2 pointer-events-none absolute left-1/2 h-[120vmin] w-[120vmin] rounded-b-full",
+              "bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]",
+              "blur-[30px]",
+            )}
+          />
+          <div className="w-full">
+            <h3 className="mb-5 text-center">
+              <span className="block font-medium text-lg text-muted-foreground">Ils nous font confiance</span>
+              <span className="font-black text-xl text-primary tracking-tight md:text-2xl">
+                Partenaires technologiques
+              </span>
+            </h3>
+
+            <LogoCloud logos={logos} />
           </div>
         </div>
       </div>

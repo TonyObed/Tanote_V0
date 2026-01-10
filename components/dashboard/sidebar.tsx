@@ -11,27 +11,27 @@ import { Button } from "@/components/ui/button"
 const navItems = [
   {
     label: "Tableau de bord",
-    href: "/dashboard",
+    href: "/student",
     icon: LayoutDashboard,
   },
   {
     label: "Diagnostic",
-    href: "/dashboard/diagnostic",
+    href: "/student/diagnostic",
     icon: Brain,
   },
   {
     label: "Exercices",
-    href: "/dashboard/exercises",
+    href: "/student/exercises",
     icon: BookOpen,
   },
   {
     label: "Progression",
-    href: "/dashboard/progress",
+    href: "/student/progress",
     icon: TrendingUp,
   },
   {
     label: "Paramètres",
-    href: "/dashboard/settings",
+    href: "/student/settings",
     icon: Settings,
   },
 ]
